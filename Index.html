@@ -4,505 +4,650 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WorkLoop | Circular Furniture as a Service</title>
+    <!-- Premium Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
     <style>
-        /* --- CSS VARIABLES & RESET --- */
+        /* --- PREMIUM CSS VARIABLES --- */
         :root {
-            --primary: #2D6A4F;   /* Deep Forest Green */
-            --secondary: #52B788; /* Fresh Leaf Green */
-            --accent: #D8F3DC;    /* Pale Mint */
-            --dark: #1B4332;      /* Dark Green/Black */
-            --text: #333333;
-            --light: #F8F9FA;
-            --wood: #D4A373;      /* Wood/Furniture tone */
-            --font-main: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            /* Palette extracted from Report */
+            --bg-cream: #F3F1E7;       /* The page background */
+            --green-deep: #3A5A40;     /* Primary Brand Color */
+            --green-dark: #1F3325;     /* Text/Hover */
+            --text-body: #4A4A4A;      /* Softer black for reading */
+            --accent-gold: #D4A373;    /* Wood tones */
+            --white: #FFFFFF;
+            
+            /* Typography */
+            --font-heading: 'Playfair Display', serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+            
+            /* Spacing */
+            --container-width: 1240px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        /* --- RESET & BASE --- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; }
 
         body {
-            font-family: var(--font-main);
-            color: var(--text);
-            line-height: 1.6;
-            background-color: var(--light);
+            font-family: var(--font-body);
+            background-color: var(--bg-cream);
+            color: var(--text-body);
+            line-height: 1.7;
+            overflow-x: hidden;
         }
 
-        a { text-decoration: none; color: inherit; }
+        h1, h2, h3, h4 {
+            font-family: var(--font-heading);
+            color: var(--green-deep);
+            font-weight: 600;
+            line-height: 1.2;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s ease; }
         ul { list-style: none; }
 
-        /* --- HEADER & NAV --- */
-        header {
-            background-color: #fff;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            position: fixed;
-            width: 100%;
-            z-index: 1000;
+        /* --- UTILITIES --- */
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 2rem;
         }
 
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem 2rem;
+        .btn-primary {
+            background-color: var(--green-deep);
+            color: var(--white);
+            padding: 1rem 2.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border: 1px solid var(--green-deep);
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: transparent;
+            color: var(--green-deep);
+        }
+
+        .section-padding { padding: 8rem 0; }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border: 1px solid var(--green-deep);
+            color: var(--green-deep);
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        /* --- HEADER --- */
+        header {
+            padding: 2rem 0;
+            position: absolute;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            background: transparent;
+        }
+
+        .nav-flex {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
 
         .logo {
+            font-family: var(--font-body);
+            font-weight: 700;
             font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            color: var(--green-deep);
+            letter-spacing: -1px;
         }
 
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-        }
-
-        .nav-links a {
-            font-weight: 500;
-            transition: color 0.3s;
-        }
-
-        .nav-links a:hover { color: var(--secondary); }
-
-        .btn-cta {
-            background-color: var(--primary);
-            color: white;
-            padding: 0.6rem 1.5rem;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-
-        .btn-cta:hover { background-color: var(--dark); }
-
-        /* --- HERO SECTION --- */
-        .hero {
-            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=1600&q=80'); /* Office placeholder */
-            background-size: cover;
-            background-position: center;
-            height: 90vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: white;
-            padding: 0 1rem;
-        }
-
-        .hero-content h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
-        }
-
-        .hero-content p {
-            font-size: 1.25rem;
-            margin-bottom: 2rem;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .hero-btn {
-            background-color: var(--secondary);
-            color: white;
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            border-radius: 5px;
-            font-weight: bold;
-            display: inline-block;
-            transition: transform 0.2s;
-        }
-
-        .hero-btn:hover { transform: translateY(-3px); }
-
-        /* --- VALUE PROP / HOW IT WORKS --- */
-        .section {
-            padding: 5rem 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
-            font-size: 2.2rem;
-            margin-bottom: 1rem;
-            color: var(--primary);
-        }
-
-        .section-subtitle {
-            text-align: center;
-            color: #666;
-            margin-bottom: 3rem;
-        }
-
-        .grid-3 {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .card {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            text-align: center;
-            transition: transform 0.3s;
-        }
-
-        .card:hover { transform: translateY(-5px); }
-        
-        .card-icon { font-size: 3rem; margin-bottom: 1rem; display: block;}
-
-        /* --- AI FEATURE --- */
-        .ai-feature {
-            background-color: var(--accent);
-            border-radius: 15px;
-            padding: 4rem 2rem;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 2rem;
-        }
-        
-        .ai-text { flex: 1; min-width: 300px; }
-        .ai-visual { flex: 1; min-width: 300px; background: white; height: 250px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: #888; border: 2px dashed #bbb;}
-
-        /* --- PRICING --- */
-        .pricing-card {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 2rem;
-            text-align: center;
+        .nav-links { display: flex; gap: 3rem; }
+        .nav-links a { 
+            font-size: 0.9rem; 
+            font-weight: 500; 
+            color: var(--green-deep);
             position: relative;
         }
-
-        .pricing-card.featured {
-            border: 2px solid var(--primary);
-            transform: scale(1.05);
-            box-shadow: 0 10px 20px rgba(45, 106, 79, 0.15);
-        }
-
-        .price {
-            font-size: 2.5rem;
-            font-weight: bold;
-            color: var(--dark);
-            margin: 1rem 0;
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--green-deep);
+            transition: width 0.3s;
         }
         
-        .price span { font-size: 1rem; font-weight: normal; color: #666; }
+        .nav-links a:hover::after { width: 100%; }
 
-        .features-list {
-            margin: 1.5rem 0;
-            text-align: left;
-        }
-
-        .features-list li { margin-bottom: 0.5rem; }
-        .features-list li::before { content: "✔"; color: var(--secondary); margin-right: 10px; }
-
-        /* --- SDGS --- */
-        .sdg-container {
+        /* --- HERO --- */
+        .hero {
+            height: 100vh;
             display: flex;
-            justify-content: center;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            margin-top: 2rem;
+            align-items: center;
+            position: relative;
+            background: url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop') no-repeat center center/cover;
         }
-        .sdg-box {
-            width: 100px;
-            height: 100px;
-            border-radius: 10px;
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(243, 241, 231, 0.85); /* Cream overlay */
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            margin-bottom: 2rem;
+            color: var(--green-dark);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 3rem;
+            color: var(--text-body);
+            max-width: 500px;
+        }
+
+        /* --- STATS / CREDIBILITY --- */
+        .stats-bar {
+            background: var(--green-deep);
+            color: var(--white);
+            padding: 3rem 0;
+        }
+        .stats-grid {
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+        .stat-item h3 { color: var(--accent-gold); font-size: 2.5rem; margin-bottom: 0.5rem; }
+        .stat-item p { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.8); }
+
+        /* --- PRODUCTS (SPLIT) --- */
+        .products-section { background-color: var(--white); }
+        
+        .split-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 4rem;
+        }
+
+        .product-col {
+            padding: 3rem;
+            border: 1px solid #E5E5E5;
+            transition: 0.4s;
+        }
+        
+        .product-col:hover { border-color: var(--green-deep); }
+
+        .line-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .price-tag {
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            color: var(--text-body);
+            font-weight: 400;
+        }
+
+        .product-list li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            font-size: 0.95rem;
+        }
+        .product-list li::before {
+            content: "•";
+            color: var(--green-deep);
+            font-size: 1.2rem;
+            line-height: 1;
+        }
+
+        /* --- SERVICES GRID --- */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        .service-card {
+            padding: 2rem;
+            background: var(--white);
+            border: 1px solid transparent;
+            transition: 0.3s;
+        }
+        .service-card:hover { border-color: var(--green-deep); transform: translateY(-5px); }
+        .service-icon { font-size: 2rem; margin-bottom: 1.5rem; color: var(--green-deep); }
+
+        /* --- AI TOOL (Refined) --- */
+        .ai-interface {
+            display: flex;
+            background: var(--white);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.03);
+            border: 1px solid #EAEAEA;
+        }
+
+        .ai-controls {
+            flex: 1;
+            padding: 3rem;
+            border-right: 1px solid #EAEAEA;
+        }
+
+        .ai-canvas-container {
+            flex: 1.5;
+            background-color: #F9F9F9;
+            position: relative;
+            min-height: 500px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-weight: bold;
-            text-align: center;
-            font-size: 0.8rem;
-            padding: 5px;
-        }
-        /* Specific SDG Colors */
-        .sdg-8 { background-color: #A21942; }
-        .sdg-9 { background-color: #FD6925; }
-        .sdg-12 { background-color: #BF8B2E; }
-        .sdg-13 { background-color: #3F7E44; }
-
-        /* --- CONTACT FORM --- */
-        .form-container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
         }
 
         .form-group { margin-bottom: 1.5rem; }
-        
-        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 500; }
-        
-        .form-group input, .form-group select, .form-group textarea {
+        .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.5rem;
+            color: var(--text-body);
+        }
+        .form-group input {
             width: 100%;
-            padding: 0.8rem;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-family: inherit;
+            padding: 1rem;
+            border: 1px solid #DDD;
+            background: #FAFAFA;
+            font-family: var(--font-body);
+            transition: 0.3s;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--green-deep);
+            background: var(--white);
+        }
+
+        /* --- PHYSICAL EVIDENCE STAMP --- */
+        .stamp-container {
+            text-align: center;
+            margin: 4rem 0;
+        }
+        .circular-stamp {
+            width: 150px;
+            height: 150px;
+            border: 2px solid var(--green-deep);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: var(--green-deep);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.8rem;
+            transform: rotate(-10deg);
+            opacity: 0.8;
         }
 
         /* --- FOOTER --- */
         footer {
-            background-color: var(--dark);
-            color: white;
-            padding: 3rem 2rem;
-            text-align: center;
+            background-color: var(--green-deep);
+            color: var(--white);
+            padding: 5rem 0 2rem 0;
+        }
+        
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr 1fr;
+            gap: 3rem;
+            margin-bottom: 4rem;
         }
 
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 2rem;
-            text-align: left;
-        }
+        .footer h4 { color: var(--accent-gold); font-size: 0.9rem; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 1px;}
+        .footer ul li { margin-bottom: 0.8rem; font-size: 0.9rem; color: #B0C4B8; }
+        .footer ul li:hover { color: var(--white); cursor: pointer; }
 
-        .footer-logo { font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem; display: block; }
-        .footer-links a { display: block; margin-bottom: 0.5rem; color: #ccc; }
-        .footer-links a:hover { color: white; }
+        .location-list li::before { content: "📍 "; }
 
         @media (max-width: 768px) {
-            .nav-links { display: none; } /* Simplified mobile nav for demo */
-            .hero-content h1 { font-size: 2.5rem; }
-            .grid-3 { grid-template-columns: 1fr; }
-            .ai-feature { flex-direction: column; }
-            .pricing-card.featured { transform: scale(1); }
+            .hero h1 { font-size: 3rem; }
+            .split-layout, .ai-interface, .footer-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+            .ai-canvas-container { min-height: 300px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- NAVIGATION -->
+    <!-- HEADER -->
     <header>
-        <div class="nav-container">
-            <a href="#" class="logo">WorkLoop</a>
+        <div class="container nav-flex">
+            <div class="logo">WorkLoop.</div>
             <nav class="nav-links">
-                <a href="#how-it-works">How It Works</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#impact">Sustainability</a>
+                <a href="#philosophy">Philosophy</a>
+                <a href="#products">The Collection</a>
+                <a href="#services">Services</a>
+                <a href="#planner">Space Planner</a>
             </nav>
-            <a href="#contact" class="btn-cta">Get Started</a>
+            <a href="#contact" class="btn-primary">Inquire Now</a>
         </div>
     </header>
 
     <!-- HERO SECTION -->
     <section class="hero">
-        <div class="hero-content">
-            <h1>Work smarter.<br>Furnish sustainably.</h1>
-            <p>Flexible furniture subscriptions for startups and remote workers. <br>The circular solution for the modern workplace.</p>
-            <a href="#pricing" class="hero-btn">View Plans</a>
-        </div>
-    </section>
-
-    <!-- PROCESS / VALUE PROP -->
-    <section id="how-it-works" class="section">
-        <h2 class="section-title">The Circular Office Model</h2>
-        <p class="section-subtitle">Why buy depreciating assets when you can subscribe to a better workspace?</p>
-        
-        <div class="grid-3">
-            <div class="card">
-                <span class="card-icon">🧠</span>
-                <h3>1. Smart Design</h3>
-                <p>Input your room size and team count. Our AI recommends the perfect ergonomic layout.</p>
-            </div>
-            <div class="card">
-                <span class="card-icon">🚚</span>
-                <h3>2. Delivery & Setup</h3>
-                <p>We deliver and install everything. Modular desks, ergonomic chairs, and acoustics.</p>
-            </div>
-            <div class="card">
-                <span class="card-icon">♻️</span>
-                <h3>3. Use & Loop</h3>
-                <p>Repairs included. When you move or resize, we swap the furniture. Nothing goes to landfill.</p>
+        <div class="container hero-content">
+            <span class="badge">Est. 2025 • Lisbon</span>
+            <h1>Furnish your office, <br>not your landfill.</h1>
+            <p>The circular furniture-as-a-service solution. Premium ergonomics, zero ownership, 100% sustainable.</p>
+            <div style="margin-top: 2rem;">
+                <a href="#products" class="btn-primary">View Lines</a>
             </div>
         </div>
     </section>
 
-    <!-- AI TOOL FEATURE HIGHLIGHT -->
-    <section class="section">
-        <div class="ai-feature">
-            <div class="ai-text">
-                <h2>🤖 Meets Design</h2>
-                <p><strong>Unsure what you need?</strong></p>
-                <p>Our proprietary AI Design Tool analyzes your floor plan to optimize for flow, lighting, and team collaboration. Get a 3D render of your new office in minutes, pre-populated with our sustainable inventory.</p>
-                <br>
-                <a href="#" style="color: var(--primary); font-weight: bold;">Try the demo &rarr;</a>
+    <!-- STATS / CREDIBILITY -->
+    <section class="stats-bar">
+        <div class="container stats-grid">
+            <div class="stat-item">
+                <h3>45kg</h3>
+                <p>CO₂ Saved Per Desk</p>
             </div>
-            <div class="ai-visual">
-                [AI Workspace Preview]
+            <div class="stat-item">
+                <h3>100%</h3>
+                <p>Circular Lifecycle</p>
             </div>
-        </div>
-    </section>
-
-    <!-- PRICING -->
-    <section id="pricing" class="section">
-        <h2 class="section-title">Simple Subscription Tiers</h2>
-        <p class="section-subtitle">Monthly pricing per employee. Cancel or scale anytime.</p>
-        
-        <div class="grid-3">
-            <!-- Basic -->
-            <div class="pricing-card">
-                <h3>Basic</h3>
-                <div class="price">€25 <span>/mo</span></div>
-                <p>Perfect for early-stage startups.</p>
-                <ul class="features-list">
-                    <li>Ergonomic Mesh Chair</li>
-                    <li>Standard Modular Desk</li>
-                    <li>Annual Maintenance Check</li>
-                    <li>Self-service Portal</li>
-                </ul>
-                <a href="#contact" class="btn-cta" style="background:var(--secondary)">Select</a>
-            </div>
-
-            <!-- Standard -->
-            <div class="pricing-card featured">
-                <div style="background:var(--primary); color:white; padding:5px; border-radius:5px 5px 0 0; position:absolute; top:-15px; left:0; width:100%;">Most Popular</div>
-                <h3>Standard</h3>
-                <div class="price">€40 <span>/mo</span></div>
-                <p>For growing SMEs & Hybrid teams.</p>
-                <ul class="features-list">
-                    <li>Everything in Basic</li>
-                    <li>Storage Unit & Lighting</li>
-                    <li>Office Decor Pack</li>
-                    <li>Repair within 48h</li>
-                </ul>
-                <a href="#contact" class="btn-cta">Select</a>
-            </div>
-
-            <!-- Premium -->
-            <div class="pricing-card">
-                <h3>Premium</h3>
-                <div class="price">€60 <span>/mo</span></div>
-                <p>Corporate ESG & Full Service.</p>
-                <ul class="features-list">
-                    <li>Custom Design Furniture</li>
-                    <li>Monthly Swap Options</li>
-                    <li>Full Damage Insurance</li>
-                    <li>ESG Carbon Report</li>
-                </ul>
-                <a href="#contact" class="btn-cta" style="background:var(--secondary)">Select</a>
+            <div class="stat-item">
+                <h3>48h</h3>
+                <p>Quote Turnaround</p>
             </div>
         </div>
     </section>
 
-    <!-- SUSTAINABILITY / SDGs -->
-    <section id="impact" class="section" style="background-color: #fff;">
-        <h2 class="section-title">Our Impact</h2>
-        <p class="section-subtitle">WorkLoop is committed to the UN Sustainable Development Goals.</p>
-        
-        <div class="sdg-container">
-            <div class="sdg-box sdg-8">SDG 8<br>Decent Work</div>
-            <div class="sdg-box sdg-9">SDG 9<br>Innovation</div>
-            <div class="sdg-box sdg-12">SDG 12<br>Responsible Consumption</div>
-            <div class="sdg-box sdg-13">SDG 13<br>Climate Action</div>
+    <!-- PHILOSOPHY / VALUE PROP -->
+    <section id="philosophy" class="section-padding">
+        <div class="container">
+            <div style="max-width: 700px;">
+                <h2 style="font-size: 3rem; margin-bottom: 2rem;">Ownership is obsolete. Access is the future.</h2>
+                <p>WorkLoop operates a digital-first model supported by local refurbishment hubs. We combine <strong>High-End Design</strong> with <strong>Circular Logistics</strong> to ensure your workspace evolves with your company, without the environmental cost.</p>
+            </div>
         </div>
-        <p style="text-align: center; margin-top: 2rem; max-width: 700px; margin-left: auto; margin-right: auto;">
-            Every desk rented saves <strong>45kg of CO2</strong> compared to buying new. We track the lifecycle of every screw, ensuring 100% circularity.
-        </p>
     </section>
 
-    <!-- CONTACT FORM -->
-    <section id="contact" class="section">
-        <h2 class="section-title">Start Your Loop</h2>
-        <div class="form-container">
-            <form id="leadForm">
-                <div class="form-group">
-                    <label>Company Name</label>
-                    <input type="text" placeholder="e.g. Acme Corp" required>
+    <!-- PRODUCTS SECTION (Split) -->
+    <section id="products" class="section-padding products-section">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 4rem;">
+                <span class="badge">The Collection</span>
+                <h2>Curated for impact.</h2>
+            </div>
+
+            <div class="split-layout">
+                <!-- ESSENTIAL LINE -->
+                <div class="product-col">
+                    <div class="line-title">
+                        <h3>Essential Line</h3>
+                        <span class="price-tag">€25 – €35 <small>/ emp / mo</small></span>
+                    </div>
+                    <p style="margin-bottom: 2rem; color: #666;">Durable, sustainable choices for startups and remote teams.</p>
+                    <ul class="product-list">
+                        <li><strong>FlexDesk Eco:</strong> Adjustable height, recycled wood veneer or bamboo.</li>
+                        <li><strong>LoopChair Lite:</strong> Ergonomic mesh, vegan upholstery, recyclable base.</li>
+                        <li><strong>EcoShelf Mod:</strong> Modular storage made from recycled steel.</li>
+                        <li><strong>LightLoop Lite:</strong> Low-energy LED replaceable modules.</li>
+                        <li><strong>Meeting Room:</strong> MeetTable Core (Recycled oak veneer).</li>
+                    </ul>
                 </div>
-                <!-- Preserved your field here -->
-                <div class="form-group">
-                    <label>Size of Office (in m^2)</label>
-                    <input type="text" placeholder="e.g. 250 m^2" required>
+
+                <!-- PRO LINE -->
+                <div class="product-col" style="background-color: var(--bg-cream);">
+                    <div class="line-title">
+                        <h3>Pro Line</h3>
+                        <span class="price-tag">€45 – €70 <small>/ emp / mo</small></span>
+                    </div>
+                    <p style="margin-bottom: 2rem; color: #666;">Premium materials, advanced tech, and custom finishes for corporate HQs.</p>
+                    <ul class="product-list">
+                        <li><strong>FlexDesk Pro:</strong> Motorized dual-motor, solid certified oak, cable mgmt.</li>
+                        <li><strong>LoopChair Pro:</strong> Advanced lumbar, posture tracking sensors.</li>
+                        <li><strong>EcoShelf Studio:</strong> Acoustic panels, reclaimed wood fronts, integrated light.</li>
+                        <li><strong>GreenPod Pro:</strong> Curated air-purifying plant sets in bio-planters.</li>
+                        <li><strong>Meeting Room:</strong> MeetTable Pro with integrated power & acoustics.</li>
+                    </ul>
                 </div>
-                <div class="form-group">
-                    <label>Company Size (Employees)</label>
-                    <select>
-                        <option>1 - 10 (Home/Startup)</option>
-                        <option>11 - 50 (SME)</option>
-                        <option>51 - 200 (Growth)</option>
-                        <option>200+ (Enterprise)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Interested Plan</label>
-                    <select>
-                        <option>Basic (€25/mo)</option>
-                        <option>Standard (€40/mo)</option>
-                        <option>Premium (€60/mo)</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" placeholder="you@company.com" required>
-                </div>
-                <button type="submit" class="btn-cta" style="width: 100%;">Get a Quote</button>
-            </form>
+            </div>
         </div>
     </section>
 
-    <!-- FOOTER -->
-    <footer>
-        <div class="footer-content">
-            <div>
-                <span class="footer-logo">🪑 WorkLoop</span>
-                <p>Furniture as a Service.<br>Made in Europe.</p>
-            </div>
-            <div class="footer-links">
-                <strong>Company</strong>
-                <a href="#">About Us</a>
-                <a href="#">Careers</a>
-                <a href="#">Partners</a>
-            </div>
-            <div class="footer-links">
-                <strong>Legal</strong>
-                <a href="#">Privacy Policy</a>
-                <a href="#">Terms of Service</a>
-                <a href="#">Circular Charter</a>
+    <!-- SERVICES -->
+    <section id="services" class="section-padding">
+        <div class="container">
+            <h2>The Service Stack</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">📐</div>
+                    <h4>Design & Planning</h4>
+                    <p>AI-assisted space planner refined by our interior designers for flow and ergonomics.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🚚</div>
+                    <h4>Delivery & Install</h4>
+                    <p>White-glove setup within 7-10 days. Safety briefings included.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🛠</div>
+                    <h4>Maintenance & Repair</h4>
+                    <p>Repair visits within 72h. Scheduled predictive maintenance included.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">📊</div>
+                    <h4>ESG Dashboard</h4>
+                    <p>Track your CO₂ savings and asset rotation for your annual sustainability report.</p>
+                </div>
             </div>
         </div>
-        <div style="margin-top: 2rem; font-size: 0.8rem; color: #888;">
-            &copy; 2023 WorkLoop Inc. All rights reserved.
+    </section>
+
+    <!-- AI PLANNER -->
+    <section id="planner" class="section-padding" style="background: var(--bg-cream);">
+        <div class="container">
+            <div style="margin-bottom: 3rem;">
+                <h2>AI Workspace Configurator</h2>
+                <p>Input your room dimensions. Generate a circular layout instantly.</p>
+            </div>
+
+            <div class="ai-interface">
+                <div class="ai-controls">
+                    <div class="form-group">
+                        <label>Room Width (Meters)</label>
+                        <input type="number" id="roomWidth" value="12">
+                    </div>
+                    <div class="form-group">
+                        <label>Room Length (Meters)</label>
+                        <input type="number" id="roomLength" value="10">
+                    </div>
+                    <div class="form-group">
+                        <label>Team Size</label>
+                        <input type="number" id="employeeCount" value="8">
+                    </div>
+                    <button onclick="generateLayout()" class="btn-primary" style="width: 100%; text-align: center;">Generate Blueprint</button>
+                    
+                    <div id="ai-output" style="margin-top: 2rem; display: none; border-top: 1px solid #eee; padding-top: 1rem;">
+                        <h4 id="rec-title"></h4>
+                        <p id="rec-text" style="font-size: 0.9rem; color: #666;"></p>
+                    </div>
+                </div>
+                <div class="ai-canvas-container">
+                    <canvas id="officeCanvas"></canvas>
+                    <div style="position: absolute; bottom: 20px; right: 20px; font-size: 0.7rem; color: #999;">
+                        WORKLOOP INTELLIGENCE V1.0
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PHYSICAL EVIDENCE -->
+    <section class="container stamp-container">
+        <div class="circular-stamp">
+            100%<br>Circular<br>WorkLoop
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;">Every item carries a digital asset tag tracking material origins and reuse cycles.</p>
+    </section>
+
+    <!-- CONTACT / FOOTER -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h2 style="color: white; margin-bottom: 1rem;">WorkLoop.</h2>
+                    <p style="color: #B0C4B8; font-size: 0.9rem;">
+                        HQ: Lisbon, Portugal<br>
+                        Launch Markets: Germany (Berlin, Hamburg, Munich)<br>
+                        Est. 2025
+                    </p>
+                </div>
+                <div>
+                    <h4>Platform</h4>
+                    <ul>
+                        <li>Essential Line</li>
+                        <li>Pro Line</li>
+                        <li>Space Planner</li>
+                        <li>ESG Reporting</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Company</h4>
+                    <ul>
+                        <li>About Us</li>
+                        <li>Careers</li>
+                        <li>Sustainability Charter</li>
+                        <li>Legal (LLC)</li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Contact</h4>
+                    <ul>
+                        <li>hello@workloop.eu</li>
+                        <li>+351 21 000 0000</li>
+                        <li style="margin-top: 1rem;">LinkedIn</li>
+                    </ul>
+                </div>
+            </div>
+            <div style="border-top: 1px solid rgba(255,255,255,0.1); padding-top: 2rem; display: flex; justify-content: space-between; font-size: 0.8rem; color: #6A8572;">
+                <span>© 2025 WorkLoop LLC. All rights reserved.</span>
+                <span>Privacy Policy &nbsp;&nbsp; Terms of Service</span>
+            </div>
         </div>
     </footer>
 
+    <!-- LOGIC SCRIPT -->
     <script>
-        // Simple Form Handler
-        document.getElementById('leadForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert("Thanks for your interest in WorkLoop! Our sustainability team will contact you shortly with a circular plan.");
-            this.reset();
-        });
+        function generateLayout() {
+            // 1. Get Inputs
+            const width = parseInt(document.getElementById('roomWidth').value);
+            const length = parseInt(document.getElementById('roomLength').value);
+            const employees = parseInt(document.getElementById('employeeCount').value);
+            
+            // 2. Setup Canvas
+            const canvas = document.getElementById('officeCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set High Resolution
+            canvas.width = canvas.parentElement.offsetWidth;
+            canvas.height = canvas.parentElement.offsetHeight;
+            
+            // Background
+            ctx.fillStyle = "#F9F9F9";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Smooth Scroll for Nav Links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                document.querySelector(this.getAttribute('href')).scrollIntoView({
-                    behavior: 'smooth'
-                });
-            });
-        });
+            // 3. Draw Room (Blueprint Style)
+            const scaleX = (canvas.width - 100) / width;
+            const scaleY = (canvas.height - 100) / length;
+            const scale = Math.min(scaleX, scaleY);
+            
+            const drawW = width * scale;
+            const drawL = length * scale;
+            const startX = (canvas.width - drawW) / 2;
+            const startY = (canvas.height - drawL) / 2;
+
+            // Walls
+            ctx.strokeStyle = "#3A5A40"; // Brand Green
+            ctx.lineWidth = 4;
+            ctx.strokeRect(startX, startY, drawW, drawL);
+            
+            // Grid lines (Architectural feel)
+            ctx.strokeStyle = "#E0E0E0";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            for (let x = startX; x <= startX + drawW; x += 40) { ctx.moveTo(x, startY); ctx.lineTo(x, startY + drawL); }
+            for (let y = startY; y <= startY + drawL; y += 40) { ctx.moveTo(startX, y); ctx.lineTo(startX + drawW, y); }
+            ctx.stroke();
+
+            // 4. Draw Furniture
+            const deskW = 1.4 * scale;
+            const deskD = 0.7 * scale;
+            
+            let desksDrawn = 0;
+            const cols = Math.floor((width - 1) / 2); 
+            
+            for (let i = 0; i < cols; i++) {
+                for (let j = 0; j < Math.floor((length - 1) / 2); j++) {
+                    if (desksDrawn < employees) {
+                        let deskX = startX + (i * 2.5 * scale) + 20;
+                        let deskY = startY + (j * 2.5 * scale) + 20;
+                        
+                        // Desk
+                        ctx.fillStyle = "#D4A373"; // Gold/Wood
+                        ctx.fillRect(deskX, deskY, deskW, deskD);
+                        
+                        // Chair
+                        ctx.beginPath();
+                        ctx.arc(deskX + deskW/2, deskY + deskD + (0.4*scale), 0.3*scale, 0, 2 * Math.PI);
+                        ctx.fillStyle = "#3A5A40";
+                        ctx.fill();
+                        
+                        desksDrawn++;
+                    }
+                }
+            }
+
+            // 5. Output Text
+            document.getElementById('ai-output').style.display = 'block';
+            const density = (width * length) / employees;
+            
+            if (density < 5) {
+                document.getElementById('rec-title').innerText = "Recommendation: Essential Layout";
+                document.getElementById('rec-text').innerText = "High density detected. We recommend the FlexDesk Eco benches to maximize floor space.";
+            } else {
+                document.getElementById('rec-title').innerText = "Recommendation: Pro Executive Layout";
+                document.getElementById('rec-text').innerText = "Spacious layout detected. We recommend FlexDesk Pro individual units with GreenPod dividers.";
+            }
+        }
     </script>
 </body>
 </html>
